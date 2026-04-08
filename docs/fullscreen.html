@@ -1,0 +1,37 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body,html { margin:0; padding:0; background:black; overflow:hidden; }
+        iframe { width:100%; height:100%; border:0; }
+    </style>
+</head>
+<body>
+
+<iframe id="frame" src=""></iframe>
+
+<script>
+    // Prende l'URL dell'evento passato come parametro
+    const url = new URL(window.location.href).searchParams.get("u");
+    document.getElementById("frame").src = url;
+
+    // Forza fullscreen appena il video appare
+    function forceFullscreen() {
+        try {
+            const iframeDoc = document.getElementById("frame").contentWindow.document;
+            const video = iframeDoc.querySelector("video");
+
+            if (video) {
+                video.muted = false;
+                video.play().catch(()=>{});
+                video.requestFullscreen().catch(()=>{});
+            }
+        } catch(e){}
+    }
+
+    // Ritenta ogni secondo (serve perché DLStreams carica il video in ritardo)
+    setInterval(forceFullscreen, 1000);
+</script>
+
+</body>
+</html>
